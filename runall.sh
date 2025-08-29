@@ -30,6 +30,10 @@ OBJECT_PID=$!
 echo "Starting translation_audio_app on port 8004..."
 uvicorn translation_audio_app:app --host 0.0.0.0 --port 8004 &
 AUDIO_PID=$!
+#starting video service
+#echo "Starting  video service"
+#uvicorn video_app:app --host 0.0.0.0 --port 8005 --timeout-keep-alive 300 &
+#VIDEO_PID=$!
 
 echo "All services started!"
 echo "Chat & Sentiment: http://localhost:8001"
@@ -40,7 +44,7 @@ echo "Translation & Audio: http://localhost:8004"
 # Function to kill all processes
 cleanup() {
     echo "Stopping all services..."
-    kill $CHAT_PID $IMAGE_PID $OBJECT_PID $AUDIO_PID 2>/dev/null
+    kill $CHAT_PID $OBJECT_PID $AUDIO_PID $IMAGE_PID 2>/dev/null
     echo "All services stopped."
     exit 0
 }

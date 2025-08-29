@@ -2,8 +2,24 @@ from fastapi import FastAPI, UploadFile, File, Query, HTTPException
 from pydantic import BaseModel
 from objectD_PostureD import detect_objects, analyze_posture, combined_detection
 import base64
+from fastapi.middleware.cors import CORSMiddleware
 
+# -----------------------------
+# Create FastAPI app
+# -----------------------------
 app = FastAPI()
+
+# -----------------------------
+# CORS setup
+# -----------------------------
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],   # allow all HTTP methods (POST, GET, OPTIONS, etc.)
+    allow_headers=["*"],   # allow all headers
+)
+
 
 class ObjectDetectionRequest(BaseModel):
     image_base64: str
@@ -16,14 +32,14 @@ class CombinedDetectionRequest(BaseModel):
     image_base64: str
     confidence_threshold: float = 0.5
 
-@app.post("/object-detection")
+@app.post("/VisionX-RT")
 def object_detection(req: ObjectDetectionRequest):
     try:
         return detect_objects(req.image_base64, req.confidence_threshold)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/object-detection/upload")
+@app.post("/VisionX-RT/upload")
 async def object_detection_upload(
     file: UploadFile = File(...),
     confidence_threshold: float = Query(0.5, description="Minimum confidence for detections")
@@ -36,14 +52,14 @@ async def object_detection_upload(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/posture-analysis")
+@app.post("/PercepFlow")
 def posture_analysis(req: PostureAnalysisRequest):
     try:
         return analyze_posture(req.image_base64)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/posture-analysis/upload")
+@app.post("/PercepFLow/upload")
 async def posture_analysis_upload(file: UploadFile = File(...)):
     try:
         file_content = await file.read()

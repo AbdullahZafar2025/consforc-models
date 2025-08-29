@@ -227,11 +227,11 @@ def detect_objects(image_base64: str, confidence_threshold: float = 0.5) -> Dict
             })
             
             # Draw bounding box
-            draw.rectangle([x1, y1, x2, y2], outline="green", width=2)
+            draw.rectangle([x1, y1, x2, y2], outline="blue", width=1)
             
             # Add label
             label_text = f"{class_name}: {confidence:.2f}"
-            draw.text((x1, y1 - 20), label_text, fill="green")
+            draw.text((x1, y1 - 20), label_text, fill="red")
         
         # Encode annotated image
         annotated_base64 = _encode_pil_to_base64(annotated_image)
@@ -252,7 +252,7 @@ def analyze_posture(image_base64: str) -> Dict[str, Any]:
     """
     Analyze posture using basic computer vision techniques.
     
-    Args:
+    Args:B
         image_base64: Base64 encoded image
     
     Returns:
